@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="3.1"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+	<context-param>
+		<param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	
+	<!-- serparador universal para componentes jsf -->
+	<context-param>
+		<param-name>javax.faces.SEPARATOR_CHAR</param-name>
+		<param-value>-</param-value>
+	</context-param>
+	
+	<!-- serparador universal para componentes jsf -->
+	<context-param>
+		<param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
+    	<param-value>true</param-value>
+	</context-param>
+	
+<!-- 	WELD -->
+	<listener>
+		<listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>
+	</listener>
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.xhtml</url-pattern>
+	</servlet-mapping>
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+	<welcome-file-list>
+		<welcome-file>nossotemplate.xhtml</welcome-file>
+	</welcome-file-list>
+	<filter>
+		<filter-name>LoginFilter</filter-name>
+		<filter-class>br.com.devdojo.maratonajsf.filter.LoginFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>LoginFilter</filter-name>
+		<url-pattern>/restricted/*</url-pattern>
+	</filter-mapping>
+	<context-param>
+		<param-name>images.location</param-name>
+		<param-value>C:var</param-value>
+	</context-param>
+<!-- 	forma de salvar os estados dos componentes -->
+	<context-param>
+		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+		<param-value>server</param-value>
+	</context-param>	
+	
+	<context-param>
+		<param-name>com.sun.faces.enableRestoreView11Compatibility</param-name>
+		<param-value>true</param-value>
+	</context-param>
+		
+	<context-param>
+		<param-name>javax.faces.FACELETS_LIBRARIES</param-name>
+		<param-value>/WEB-INF/devdojo-components.taglib.xml;/WEB-INF/devdojo-functions.taglib.xml</param-value>
+	</context-param>	
+	
+	<error-page>
+		<exception-type>javax.faces.application.ViewExpiredException</exception-type>
+		<location>/expirederror.xhtml</location>
+	</error-page>
+<!-- 	numero de view que vai poder sem que a sessao expire -->
+<!-- 	<context-param> -->
+<!-- 		<param-name>com.sun.faces.numberOfLogicalViews</param-name> -->
+<!-- 		<param-value>2</param-value> -->
+<!-- 	</context-param>	 -->
+	<!-- 	numero de view que vai poder sem que a sessao expire -->
+<!-- 	<context-param> -->
+<!-- 		<param-name>com.sun.faces.numberOfViewsInSession</param-name> -->
+<!-- 		<param-value>4</param-value> -->
+<!-- 	</context-param>	 -->
+	
+<!-- 	metodo de salvar compente- podendo ser parcial ou completa(todos os componentes da tela) -->
+<!-- 	<context-param> -->
+<!-- 		<param-name>javax.faces.PARTIAL_STATE_SAVING</param-name> -->
+<!-- 		<param-value>FALSE</param-value> -->
+<!-- 	</context-param>	 -->
+	<env-entry>
+		<env-entry-name>jsf/ClientSideSecretKey</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<env-entry-value>NeeYcMZH26jmnItN7LKPlN2j79e4tMNl9SeAj9nx/m8=</env-entry-value>
+	</env-entry>
+</web-app>

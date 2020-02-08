@@ -1,0 +1,168 @@
+<ui:composition template="WEB-INF/template/layout.xhtml"
+				xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://xmlns.jcp.org/jsf/html"
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+				xmlns:f="http://xmlns.jcp.org/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<ui:define name="content">
+	
+		<c:set var="numerosList" value="#{[1,2,3,4,5,6,7,8,9,10]}"/>
+
+	#{(soma -> soma + num) (10)}
+	#{((v1, v2, v3) -> v1 * v2 * v3) (1,5,10)}
+	#{(x -> x*x*x)(2)}
+	#{cubo = (x -> x*x*x); cubo(10)}
+
+	<h:form>
+		<h:commandButton actionListener="#{estudanteRegistrarBean.calcularCubo((x -> x*x*x), 10)}" value="Calcular Cubo" />
+	</h:form>
+	
+	<!-- Lists -->
+	<ui:repeat var="fodeza" value="#{['DevDojo', 'e', 'foda']}">
+		#{fodeza}
+	</ui:repeat>
+		<br/>
+	<!-- Set -->
+	<ui:repeat var="fodeza" value="#{{'DevDojo', 'e', 'foda'}}">
+		#{fodeza}
+	</ui:repeat>
+		<br/>
+	<!-- Map -->
+	<ui:repeat var="fodezaMap" value="#{{'Melhor lugar':'Devdojo','Melhor curso' : 'Maratonas'}}">
+		<ui:repeat var="entry" value="#{fodezaMap.entrySet().toArray()}">
+			#{entry.key} - #{entry.value}
+		</ui:repeat>
+	</ui:repeat>
+		<br/>
+		
+	<ui:repeat var="result" value="#{numerosList.stream().filter(v->v>5).toList()}">
+		#{result}
+	</ui:repeat>
+	
+	#{numerosList.stream().average().get()}
+	#{numerosList.stream().sum()}
+	#{numerosList.stream().filter(v -> v>5).sum()}
+	<p:importEnum
+		type="br.com.devdojo.maratonajsf.bean.estudante.model.enums.Turno"
+		var="Turno" allSuffix="ALL_ENUM_VALUES" />
+
+	<h:outputLabel value="Hello World" />
+	<br />
+	<h:outputLabel value="#{estudanteRegistrarBean.estudante.nome}" />
+	<br />
+	<h:outputLabel
+		value="#{estudanteRegistrarBean.estudante.nota1 eq estudanteRegistrarBean.estudante.nota2}" />
+	<br />
+	<h:outputLabel
+		value="#{estudanteRegistrarBean.estudante.nota1 == estudanteRegistrarBean.estudante.nota2}" />
+	<br />
+	<h:outputLabel
+		value="#{estudanteRegistrarBean.estudante.nota1 eq estudanteRegistrarBean.estudante.nota2 
+		and estudanteRegistrarBean.estudante.nome.equals('Willian')}" />
+	<br />
+	<h:outputText value="Comparação notas " />
+	<h:outputLabel
+		value="#{estudanteRegistrarBean.estudante.nota1 le estudanteRegistrarBean.estudante.nota2}" />
+	<br />
+	<h:outputLabel
+		value="#{estudanteRegistrarBean.estudante.nota1 eq 0 ? 'Zero' : 'Não Zero'}" />
+	<br />
+	<h:outputLabel value="#{estudanteRegistrarBean.estudante.nota1 = 10}" />
+	<br />
+	<h:outputLabel value="#{estudanteRegistrarBean.estudante.nota1}" />
+	<br />
+	<h:outputLabel
+		value="#{estudanteRegistrarBean.estudante.nome += ' sobrenome'}" />
+	<br />
+	<h:outputLabel value="#{estudanteRegistrarBean.estudante.nome}" />
+	<br />
+
+	<!-- Palabras reservadas and, or, not, eq, ne, lt, le, ge, true, false, null, instanceof, empty, div, mod -->
+	<h:outputText value="ENUM" />
+	<br />
+	<h:outputLabel
+		value="#{estudanteRegistrarBean.estudante.turno eq Turno.VESPERTINO}" />
+	<br />
+	<!--     Arrrays -->
+	<h:outputLabel
+		value="#{estudanteRegistrarBean.nomesArray[0]} 
+							#{estudanteRegistrarBean.nomesArray[1]}
+							#{estudanteRegistrarBean.nomesArray[2]}" />
+	<br />
+	<ui:repeat var="nome" value="#{estudanteRegistrarBean.nomesArray}">
+		<h:outputLabel value="#{nome}" />
+	</ui:repeat>
+	<!--     List -->
+	<br />
+	<h:outputLabel
+		value="#{estudanteRegistrarBean.nomesList.get(0)} 
+							#{estudanteRegistrarBean.nomesList.get(1)}
+							#{estudanteRegistrarBean.nomesList.get(2)}" />
+	<br />
+	<ui:repeat var="nome" value="#{estudanteRegistrarBean.nomesList}">
+		<h:outputLabel value="#{nome}" />
+	</ui:repeat>
+	<!-- 	Set -->
+	<br />
+	<ui:repeat var="nome" value="#{estudanteRegistrarBean.nomesSet.toArray()}">
+		<h:outputLabel value="#{nome}" />
+	</ui:repeat>
+	
+	<!-- 	Map -->
+		<br />
+	<h:outputLabel value="#{estudanteRegistrarBean.nomesMap.get('Goku')}"/>
+	<ui:repeat var="entry" value="#{estudanteRegistrarBean.nomesMap.entrySet().toArray()}">
+		<h:outputFormat value="#{entry.key} - #{entry.value}" /><br />
+	</ui:repeat>
+	
+	<!-- Executando metodos no bean -->
+	#{estudanteRegistrarBean.executar()}	
+	#{estudanteRegistrarBean.executar("xuxubeleza")}
+	#{estudanteRegistrarBean.executar(estudanteRegistrarBean.estudante.nome)}
+	#{estudanteRegistrarBean.executarRetorno(estudanteRegistrarBean.estudante.nome)}
+	<h:form>
+		<h:commandButton action="#{estudanteRegistrarBean.irParaIndex2()}" value="Ir para próxima página"/><br/>
+		<h:commandButton value="Soltar magia" onclick="fazMagica('camera')"/><br/>
+		<h:commandButton value="Alert nome" onclick="alertNome('#{estudanteRegistrarBean.estudante.nome}')"/>
+	</h:form>
+	
+	<!-- Imprimindo css com el -->
+	<ui:repeat var="nome" value="#{estudanteRegistrarBean.nomesList}"  varStatus="status">
+		
+		<h:outputLabel value="#{nome}" style="color: #{status.index mod 2 == 0 ? 'red' : 'green'}"/><br/>
+	</ui:repeat>
+	<br/>
+	<h:form>
+		<h:commandButton value="Exibir notas" >
+			<f:ajax render="notasGrid" listener="#{estudanteRegistrarBean.exibirNotas()}"></f:ajax>
+		</h:commandButton><br/>
+		<h:commandButton value="Esconder notas" >
+			<f:ajax render="notasGrid" listener="#{estudanteRegistrarBean.esconderNotas()}"></f:ajax>
+		</h:commandButton><br/>
+		<h:panelGrid id="notasGrid">
+			<h:outputText value="#{estudanteRegistrarBean.estudante.nome}" /><br/>		
+			<h:outputText value="#{estudanteRegistrarBean.estudante.sobrenome}" /><br/>
+			<h:outputText value="#{estudanteRegistrarBean.estudante.turno}" /><br/>
+			<h:outputText value="#{estudanteRegistrarBean.estudante.nota1}" 
+						rendered="#{estudanteRegistrarBean.mostrarNotas}"/><br/>
+			<h:outputText value="#{estudanteRegistrarBean.estudante.nota2}"
+						rendered="#{estudanteRegistrarBean.mostrarNotas}" /><br/>
+			<h:outputText value="#{estudanteRegistrarBean.estudante.nota3}"
+						rendered="#{estudanteRegistrarBean.mostrarNotas}" /><br/>
+			<h:outputText value="#{estudanteRegistrarBean.mostrarNotas}" />
+		</h:panelGrid>
+		<h:commandButton value="Exibir Link" >
+			<f:ajax render="pgLink" listener="#{estudanteRegistrarBean.exibirLink()}"></f:ajax>
+		</h:commandButton><br/>
+		<h:commandButton value="Esconder Link" >
+			<f:ajax render="pgLink" listener="#{estudanteRegistrarBean.esconderLink()}"></f:ajax>
+		</h:commandButton><br/>
+		<h:panelGroup id="pgLink">
+			<ui:fragment id="fragmentLink" rendered="#{estudanteRegistrarBean.mostrarLink}">
+				<a href="http://www.google.com.br" target="_blank">www.google.com.br</a>
+			</ui:fragment>	
+		</h:panelGroup>
+	</h:form>
+	</ui:define>
+</ui:composition>

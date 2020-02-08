@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+	<title>Really simple CRUD</title>
+</h:head>
+<h:body>
+	<h:form>
+		<h:outputLabel value="Segunda pagina de registro do Flow Scoped" />
+		<h:panelGrid columns="2">
+			<h:outputLabel value="Endereco" />
+			<h:inputText value="#{testeFlowBean.endereco}" />
+		</h:panelGrid>
+		<h:commandButton action="registration1?faces-redirect=true" value="Back" />
+		<h:commandButton action="registration3?faces-redirect=true" value="Next" />
+		<h:commandButton action="callPendencies" value="Validar Pendencias" />
+	</h:form>
+</h:body>
+</html>

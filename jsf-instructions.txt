@@ -1,0 +1,134 @@
+﻿
+Beans são as controller
+Hot deploy, permite mudar corpo de metodos e arquivos xhtml sem previsar restar server
+Notacao ManagedBean vai ser depreciada, para o caso se deve usar o @Named, que faz parte da especificao CDI
+Classes do tipo CDI não previsam ser instanciadas, isso ficar de responsabilidade do container(wildfly)
+#{} expression language - usado para escrever ou ler valores das classes ManagedBean gerenciado pelo CDI
+Usa-se o padrao para JavaBeans para padronizar o acesso a atributos
+expression language prime faces 
+< lt
+and 
+<0 le
+eq 0 ? 'Erro' : 'nao zero'
+concatenar +=
+
+action sempre espera algum tipo de retorno
+actionListener não espera retorno, mesmo que seja de um metodo que tenha retorno
+
+style utilizado para colocar um css puro
+styleClass utilizado classes de um arquivo css
+
+pacote novo para CDI javax.enterprise.context e alguns outros escopos no javax.faces.view
+toda classe bean deve implementar Serializable
+
+no requestScope os objetos ficam vivos durante uma requisição do tipo forwarding
+no requestScope os objetos morrem durante uma requisção do tipo redirec
+
+Session escope morre ao fechar o browser ou ao chamar um metodo para invalidar aquela sessao
+
+Session escope deve ser utilizado quando um determinado objeto deve ser utilizado em mais por 
+um periodo de tempo maior de navegação
+
+Request dura uma requisição
+Session dura ate terminar a sessao ou fechar o navegador
+
+View somente carrega os dados e os mantem enquanto estiver na mesma pagina, casa bem com o uso de ajax
+
+ApplicationScoped manter objeto enquanto o servidor estiver rodando, sendo esse objeto acessivel para qualquer
+outro bean da applicação, funciona como um objeto que tem tudo dentro como static. Pode ser usado para carregar
+do banco de dados e manter os valores na memorida de coisas que são comuns a todos os usuarios do sistema
+
+ConversationScope - utilizado em wizards, onde ao avançar de um next next e manter o estado de um determinado bean
+	Funciona como se ele pedisse para adiconar um objeto na sessão ao fim defindo tira-lo
+	Tem dois estado, ao ser criado esta no modo Transiente(em espera), que funciona como um RequestEscoped
+	e Long Running, que é quando já esta inicado
+
+
+Filtros - são executados a cada requisição
+
+Params - são acessíveis a todo o projeto e tem o mesmo efeito que se colocarmos uma variavel em um applicationscoped
+Para passar parametros de um scoped para outro, pode ser passado de por get, dentro do redirect de uma função
+
+f:atributes é muito util quando vc esta usando componentes do primefaces
+f:setpropertyactionlistener quando vc quer setar valores diretamente no bean
+FlashScope é util para colocar um objeto que dura uma requisição e assim pode ser passado para outro bean
+essa é a molhor forma de passar objetos
+
+FlowScope - versao melhorada do ConversationScope, pois não precisa definir begin e end
+@Dependent é o escopo padrão, caso não explicitamente use algum, ele é escolhido
+	o objeto dessa classe é criado e destruido toda vez que ele é executado
+	Caso ele eteja injetado em um outro escopo, ele assumirá o escopo de seu pai
+
+A injeção de dependencias se faz util quando é necessario pegar dados de outro escopo dentro de um escopo, por exemplo
+	pegar dados da sessao e utilizar dentro de um Scpo View.
+
+Injection pode ser feitas onde um objeto faz a injection de outro com um ciclo de vida maior ou igual que o a ser utilizado.
+RequestScoped - pode conter ApplicationScoped, SessionScoped, RequestScopede, Dependent
+ViewScoped - pode conter ApplicationScoped, SessionScoped, RequestEscoped(nesse caso os atributos quando chamados serão
+criados novamente), Dependent
+SessionScoped - pode conter ApplicationScoped, SessionScoped, Dependent
+ApplicationScoped - pode conter Dependent
+
+
+ciclo de vida jsf
+toda requisição é composta por uma arvore de componentes(UIViewRoot), que contem os elementos xhtml
+em uma nova requisção a fase "Restore View" é prescedida na fase "Render response"(onde o bean é construido)
+
+
+Caso seja um segunda requisação
+Restore View - verifica que ja existe a UIViewRoot
+ApplyRequestValue - pega os valores da view, e agrupa em parametros para a proxima fase
+Process Validation - validas componentes que tem conversor ou validator, caso por exemplo os valores de um comobobox,
+	caso de erro ele passa os erros para a Render Response
+Update Model - chama valores do bean definidos na view setando os
+Invoke Application - submete o formulario(executa os action ou actionListene) para que sejam aplicados na proxima fase
+e atualiza a arvore de componentes
+
+Ao setar um UIinput immediate=true, o processos de validação da fase "Process Validation" são applicados na fase 
+"Apply Request value" e caso haja erro, vai para fase final do ciclo com msg de erro, sendo validado primeito que
+os outros input que não tem immediate. immediate=true UIcommand, muito
+utilizado para não fazer validações em casos de botao cancelar, pois ignora todas as validações de input.
+
+converters - muito utilizados em componentes em que vc precisa trabalhar com objetos, ao inves de atributos simples,
+como em dropdonw, combobox, etc
+
+
+ajax delay=1000 todas a requisições ajax feitas dentro de um segundo serão ignoradas e somente a ultima é executada
+um atributo com @Trasient não é persistido no banco de dados com toda certeza
+
+Ajax
+@form - diz para o ajax usar todos os componentes contidos no fomlário, se utilizado no render também faz com que
+tal formulário seja renderizado.
+@this - refere-se ao elemnto que está efetuando a requisição ajax, no caso o componente que contêm a tag <f:ajax, o 
+mesmo acontece se vc colocar dentro do render, somente este componente será renderizado
+@none - diz que nada deve ser feito, serve para inativar um render ou um execute
+@all - significa todos os componentes da página, o que se equivale a uma requisão completa, onde alguns estado fora
+do jsf serão mantidos, como javascript
+rederizações personalizadas = render="@form form2:nomeOut2"
+
+<!-- alterando separador universal para componentes jsf -->
+	<context-param>
+		<param-name>javax.faces.SEPARATOR_CHAR</param-name>
+		<param-value>-</param-value>
+	</context-param>
+
+utilizando listener no f:ajax você perde a propriedade de navegação entre páginas, caso determinado método retorno uma
+sendo úttil sua utilização em casos ondem determinado componente não tem um actionListener associado, ex comobox. Caso
+chame uma função, o método chamado no listener sempre passa um parâmetro da classe AjaxBehaviorEvent
+
+render do jsf tem é equivalente ao update do primefaces
+
+
+xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" força renderizar componentes no lado do cliente
+
+@Size tipo de validação útil ao utilizar componentes do jsf e html5
+
+
+estado do componente pode ser salvo no cliente ou no servidor
+
+server - salva componentes na memoria
+	requisições get - view logicas - valor default de 15 abas para, ao passar sera viewexpired exception(pois temos um limite de abas ativas)
+	requisicoes post - view fisicas - diretamente ligada a view logica, para cada view fisica, pode haver 15 view fisicas ( requisiçõe ajax não são post)
+
+-1719877380464865658:-5602562711526684005
+ao invalidar uma sessão o view id se perde

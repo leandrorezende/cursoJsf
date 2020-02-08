@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:dc="http://devdojo.com.br/components">
+<h:head>
+	<title>Really simple CRUD</title>
+</h:head>
+<f:metadata>
+	<f:view action="#{dataTableTesteBean.init()}"/>
+</f:metadata>
+<h:body>
+	<p:importEnum
+		type="br.com.devdojo.maratonajsf.bean.estudante.model.enums.Turno"
+		var="Turno" allSuffix="ALL_ENUM_VALUES" />
+	<p:messages autoUpdate="true"/>
+	<h:form>
+		<h:dataTable value="#{dataTableTesteBean.estudanteList}" var="estudanteVar">
+			<h:column>
+				<f:facet name="header">
+					<h:commandLink action="#{dataTableTesteBean.orderByNome('asc')}">Nome asc</h:commandLink>	
+					<h:commandLink action="#{dataTableTesteBean.orderByNome('desc')}">Nome desc</h:commandLink>				
+				</f:facet>
+				<h:outputText value="#{estudanteVar.nome}" rendered="#{not estudanteVar.editing}"/>
+				<h:inputText value="#{estudanteVar.nome}" rendered="#{estudanteVar.editing}"/>
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:commandLink action="#{dataTableTesteBean.orderBySobrenome('asc')}">Sobrenome asc</h:commandLink>	
+					<h:commandLink action="#{dataTableTesteBean.orderBySobrenome('desc')}">Sobrenome desc</h:commandLink>				
+				</f:facet>
+				<h:outputText value="#{estudanteVar.sobrenome}" rendered="#{not estudanteVar.editing}"/>
+				<h:inputText value="#{estudanteVar.sobrenome}" rendered="#{estudanteVar.editing}"/>
+			</h:column>
+			<h:column>
+				<f:facet name="header">Turno</f:facet>
+				<h:outputText value="#{estudanteVar.turno}" rendered="#{not estudanteVar.editing}"/>
+				<h:selectOneMenu value="#{estudanteVar.turno}" rendered="#{estudanteVar.editing}">
+					<f:selectItems value="#{Turno.ALL_ENUM_VALUES}" var="turno" 
+					itemValue="#{turno}" itemLabel="#{turno}"/>
+				</h:selectOneMenu> 
+			
+			</h:column>
+			<h:column>
+				<f:facet name="header">Email</f:facet>
+				<h:outputText value="#{estudanteVar.email}" rendered="#{not estudanteVar.editing}"/>
+				<h:inputText value="#{estudanteVar.email}" rendered="#{estudanteVar.editing}"/>
+			</h:column>
+			<h:column>
+				<f:facet name="header"></f:facet>
+				<h:commandLink actionListener="#{dataTableTesteBean.remove(estudanteVar)}" rendered="#{not estudanteVar.editing}">
+					<h:outputText value="Remover" />
+					<dc:confirmDelete/>
+				</h:commandLink>
+			</h:column>
+			<h:column>
+				<f:facet name="header"></f:facet>
+				<h:commandLink actionListener="#{dataTableTesteBean.edit(estudanteVar)}" rendered="#{not estudanteVar.editing}">
+					<h:outputText value="Editar" />
+				</h:commandLink>
+			</h:column>
+		</h:dataTable>
+		<h:commandButton actionListener="#{dataTableTesteBean.save()}" value="Save" />
+	</h:form>
+</h:body>
+</html>
